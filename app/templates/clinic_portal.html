@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOCTORS ON CALL | Instant Medical Staffing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f4ff',
+                            100: '#e0e9ff',
+                            500: '#667eea',
+                            600: '#5568d3',
+                            700: '#4c51bf',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        .input-field {
+            transition: all 0.2s ease;
+        }
+        .input-field:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        .progress-bar {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <span class="text-2xl font-bold text-gray-900">🩺</span>
+                        <span class="ml-2 text-xl font-bold text-gray-900">DOCTORS ON CALL</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium">How it works</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium">Pricing</a>
+                    <button class="btn-primary text-white px-6 py-2 rounded-lg text-sm font-semibold">
+                        Sign In
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="gradient-bg py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center animate-fade-in">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                    Instant, Verified Medical Staffing
+                </h1>
+                <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+                    Fill doctor shifts in minutes, not hours. AI-powered matching with 100% NMC verified professionals.
+                </p>
+                
+                <!-- Trust Indicators -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12">
+                    <div class="glass-effect rounded-xl p-6 card-hover">
+                        <div class="text-4xl mb-3">⚡</div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">8 Minutes</h3>
+                        <p class="text-gray-600">Average time to fill a shift</p>
+                    </div>
+                    <div class="glass-effect rounded-xl p-6 card-hover">
+                        <div class="text-4xl mb-3">✅</div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">100%</h3>
+                        <p class="text-gray-600">NMC Verified Doctors</p>
+                    </div>
+                    <div class="glass-effect rounded-xl p-6 card-hover">
+                        <div class="text-4xl mb-3">💳</div>
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">48 Hours</h3>
+                        <p class="text-gray-600">Guaranteed payment to doctors</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Request Form Card -->
+        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-10 animate-slide-up">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Request a Doctor Shift</h2>
+                <p class="text-gray-600">Fill out the form below and our AI will match you with verified, available doctors in your area.</p>
+            </div>
+
+            <form id="shiftRequestForm" class="space-y-6">
+                <!-- Row 1 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            🏥 Clinic / Hospital Name <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            name="clinic_name"
+                            required
+                            class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none"
+                            placeholder="e.g., City Care Clinic, Vashi"
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            📍 Clinic Pincode <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            name="clinic_pincode"
+                            required
+                            maxlength="6"
+                            pattern="[0-9]{6}"
+                            class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none"
+                            placeholder="e.g., 400703"
+                        >
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            👨‍⚕️ Required Specialty <span class="text-red-500">*</span>
+                        </label>
+                        <select 
+                            name="specialty"
+                            required
+                            class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none bg-white"
+                        >
+                            <option value="">Select specialty</option>
+                            <option value="General Physician">General Physician</option>
+                            <option value="Pediatrician">Pediatrician</option>
+                            <option value="Gynecologist">Gynecologist</option>
+                            <option value="Orthopedic">Orthopedic</option>
+                            <option value="Dermatologist">Dermatologist</option>
+                            <option value="Cardiologist">Cardiologist</option>
+                            <option value="ENT Specialist">ENT Specialist</option>
+                            <option value="Ophthalmologist">Ophthalmologist</option>
+                            <option value="Psychiatrist">Psychiatrist</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            📅 Shift Date <span class="text-red-500">*</span>
+                        </label>
+                        <input 
+                            type="date" 
+                            name="shift_date"
+                            required
+                            min=""
+                            class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none"
+                        >
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            ⏰ Shift Timing <span class="text-red-500">*</span>
+                        </label>
+                        <select 
+                            name="shift_time"
+                            required
+                            class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none bg-white"
+                        >
+                            <option value="">Select timing</option>
+                            <option value="09:00 AM - 01:00 PM (Morning Half)">09:00 AM - 01:00 PM (Morning Half)</option>
+                            <option value="02:00 PM - 06:00 PM (Evening Half)">02:00 PM - 06:00 PM (Evening Half)</option>
+                            <option value="09:00 AM - 06:00 PM (Full Day)">09:00 AM - 06:00 PM (Full Day)</option>
+                            <option value="06:00 PM - 10:00 PM (Night Shift)">06:00 PM - 10:00 PM (Night Shift)</option>
+                            <option value="Custom">Custom Timing</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            ❓ Reason for Request <span class="text-red-500">*</span>
+                        </label>
+                        <select 
+                            name="reason_posted"
+                            required
+                            class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none bg-white"
+                        >
+                            <option value="">Select reason</option>
+                            <option value="Doctor on planned leave">Doctor on planned leave</option>
+                            <option value="Sudden illness / emergency">Sudden illness / emergency</option>
+                            <option value="Extra OPD load">Extra OPD load / high patient volume</option>
+                            <option value="New specialty requirement">New specialty requirement</option>
+                            <option value="Staff shortage">Staff shortage</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        📱 How do you currently find doctors?
+                    </label>
+                    <select 
+                        name="current_sourcing_method"
+                        class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none bg-white"
+                    >
+                        <option value="">Select method</option>
+                        <option value="WhatsApp groups">WhatsApp groups</option>
+                        <option value="Personal network / referrals">Personal network / referrals</option>
+                        <option value="Traditional staffing agency">Traditional staffing agency</option>
+                        <option value="Job portals">Job portals</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Additional Notes -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        💬 Additional Requirements (Optional)
+                    </label>
+                    <textarea 
+                        name="additional_notes"
+                        rows="4"
+                        class="input-field w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none resize-none"
+                        placeholder="e.g., Need doctor with 5+ years experience, must speak Hindi and Marathi, parking available at clinic..."
+                    ></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-4">
+                    <button 
+                        type="submit"
+                        class="btn-primary w-full text-white font-bold py-4 px-8 rounded-lg text-lg shadow-lg"
+                    >
+                        🚀 Find Verified Doctors Now
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Processing Modal (Hidden by default) -->
+        <div id="processingModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 animate-slide-up">
+                <div class="text-center mb-6">
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">🤖 AI Matching in Progress</h3>
+                    <p class="text-gray-600">Finding the best verified doctors for your shift...</p>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="mb-6">
+                    <div class="bg-gray-200 rounded-full h-3 overflow-hidden">
+                        <div id="progressBar" class="progress-bar h-full rounded-full" style="width: 0%"></div>
+                    </div>
+                    <p id="progressText" class="text-center text-sm font-semibold text-gray-700 mt-3">Initializing...</p>
+                </div>
+
+                <!-- Status Steps -->
+                <div id="statusSteps" class="space-y-3">
+                    <!-- Steps will be added dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Modal (Hidden by default) -->
+        <div id="successModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 animate-slide-up">
+                <div class="text-center mb-6">
+                    <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Shift Request Submitted Successfully!</h3>
+                    <p class="text-gray-600">We're matching you with verified doctors now.</p>
+                </div>
+
+                <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1">Shift ID</p>
+                            <p id="shiftId" class="text-lg font-bold text-gray-900">-</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1">Status</p>
+                            <p class="text-lg font-bold text-green-600">Matching</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1">Expected Response</p>
+                            <p class="text-lg font-bold text-gray-900">Within 30 mins</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1">Doctors Notified</p>
+                            <p class="text-lg font-bold text-gray-900">3-5 doctors</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+                    <h4 class="font-bold text-gray-900 mb-3">📋 What Happens Next?</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-start">
+                            <span class="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">1</span>
+                            <div>
+                                <p class="font-semibold text-gray-900">AI Matching</p>
+                                <p class="text-sm text-gray-600">Our AI analyzes verified doctors in your area and matches based on specialty, availability, and proximity.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">2</span>
+                            <div>
+                                <p class="font-semibold text-gray-900">Doctor Notification</p>
+                                <p class="text-sm text-gray-600">Top matched doctors receive WhatsApp notifications and can accept instantly.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <span class="flex-shrink-0 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">3</span>
+                            <div>
+                                <p class="font-semibold text-gray-900">Confirmation</p>
+                                <p class="text-sm text-gray-600">You'll receive a confirmation with doctor details within 30 minutes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button 
+                    onclick="closeSuccessModal()"
+                    class="btn-primary w-full text-white font-bold py-3 px-8 rounded-lg"
+                >
+                    Got it!
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p class="text-lg font-semibold text-white mb-2">DOCTORS ON CALL</p>
+                <p class="mb-4">India's First AI-Powered Medical Staffing Platform</p>
+                <p class="text-sm">Serving Mumbai, Navi Mumbai & Thane | 24/7 Support: +91-98765-43210</p>
+                <div class="mt-6 space-x-6 text-sm">
+                    <a href="#" class="hover:text-white">Privacy Policy</a>
+                    <a href="#" class="hover:text-white">Terms of Service</a>
+                    <a href="#" class="hover:text-white">Contact Us</a>
+                </div>
+                <p class="mt-6 text-xs">© 2026 Doctors On Call. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Set min date to today
+        document.querySelector('input[name="shift_date"]').min = new Date().toISOString().split('T')[0];
+
+        // Form submission handler
+        document.getElementById('shiftRequestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Show processing modal
+            showProcessingModal();
+            
+            try {
+                const response = await fetch('/api/v1/pilot/request-shift', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    // Simulate AI processing
+                    await simulateAIProcessing();
+                    
+                    // Show success
+                    showSuccessModal(result.id);
+                } else {
+                    alert('Failed to submit request. Please try again.');
+                    hideProcessingModal();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please check your connection and try again.');
+                hideProcessingModal();
+            }
+        });
+
+        function showProcessingModal() {
+            document.getElementById('processingModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideProcessingModal() {
+            document.getElementById('processingModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function showSuccessModal(shiftId) {
+            document.getElementById('shiftId').textContent = shiftId.substring(0, 8).toUpperCase();
+            document.getElementById('processingModal').classList.add('hidden');
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            document.getElementById('shiftRequestForm').reset();
+        }
+
+        async function simulateAIProcessing() {
+            const steps = [
+                { progress: 15, text: '🔍 Validating shift requirements...' },
+                { progress: 30, text: '🌍 Scanning verified doctors in your area...' },
+                { progress: 50, text: '📊 Analyzing availability and specialization match...' },
+                { progress: 70, text: '⭐ Ranking doctors by reliability and proximity...' },
+                { progress: 85, text: '📱 Sending notifications to top matches...' },
+                { progress: 100, text: '✅ Matching complete!' }
+            ];
+
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const statusSteps = document.getElementById('statusSteps');
+
+            for (const step of steps) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                progressBar.style.width = step.progress + '%';
+                progressText.textContent = step.text;
+                
+                // Add step to list
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'flex items-center text-sm animate-fade-in';
+                stepDiv.innerHTML = `
+                    <svg class="w-5 h-5 text-green-600 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="text-gray-700">${step.text}</span>
+                `;
+                statusSteps.appendChild(stepDiv);
+            }
+            
+            // Wait a bit before showing success
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+    </script>
+</body>
+</html>

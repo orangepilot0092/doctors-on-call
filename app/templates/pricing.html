@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing | DOCTORS ON CALL</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', -apple-system, sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl">🩺</span>
+                    <span class="ml-2 text-xl font-bold">DOCTORS ON CALL</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-gray-900">Home</a>
+                    <a href="/doctors" class="text-gray-600 hover:text-gray-900">For Doctors</a>
+                    <a href="/pricing" class="text-primary-600 font-semibold">Pricing</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <div class="gradient-bg py-16 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">Simple, Transparent Pricing</h1>
+        <p class="text-xl text-white/90">Start with a 14-day free trial. No credit card required.</p>
+    </div>
+
+    <!-- Pricing Grid -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div id="pricingGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Plans will be loaded here -->
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="bg-white py-16">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">Can I cancel anytime?</h3>
+                    <p class="text-gray-600">Yes, you can cancel your subscription at any time. No long-term contracts, no hidden fees.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">What happens if I exceed my shift limit?</h3>
+                    <p class="text-gray-600">Additional shifts are billed at your plan's per-shift rate. We'll notify you before you hit your limit.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">Do you verify doctors?</h3>
+                    <p class="text-gray-600">Yes! Every doctor is 100% NMC verified. We use AI-powered verification plus manual review.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-lg mb-2">How fast can I get a doctor?</h3>
+                    <p class="text-gray-600">Average match time is 8 minutes. For emergencies, we can fill shifts in as little as 30 minutes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12">
+        <div class="text-center">
+            <p class="text-white font-semibold mb-2">DOCTORS ON CALL</p>
+            <p class="text-sm">India's First AI-Powered Medical Staffing Platform</p>
+            <p class="text-xs mt-4">© 2026 Doctors On Call. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Load plans from API
+        async function loadPlans() {
+            try {
+                const response = await fetch('/api/v1/subscriptions/plans');
+                const plans = await response.json();
+                
+                const grid = document.getElementById('pricingGrid');
+                
+                plans.forEach(plan => {
+                    const card = document.createElement('div');
+                    card.className = `bg-white rounded-2xl shadow-xl p-8 card-hover ${plan.is_popular ? 'ring-2 ring-primary-500' : ''}`;
+                    
+                    card.innerHTML = `
+                        ${plan.is_popular ? '<div class="bg-primary-500 text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-4">MOST POPULAR</div>' : ''}
+                        <h3 class="text-2xl font-bold text-gray-900 mb-2">${plan.name}</h3>
+                        <p class="text-gray-600 mb-4">${plan.description}</p>
+                        <div class="mb-6">
+                            <span class="text-4xl font-bold">₹${plan.monthly_price.toLocaleString('en-IN')}</span>
+                            <span class="text-gray-500">/month</span>
+                        </div>
+                        <ul class="space-y-3 mb-8">
+                            ${plan.features.map(f => `<li class="flex items-center"><span class="text-green-500 mr-2">✓</span>${f}</li>`).join('')}
+                        </ul>
+                        <button onclick="subscribeToPlan('${plan.tier}')" class="w-full bg-primary-500 text-white font-bold py-3 rounded-lg hover:bg-primary-600 transition">
+                            Start 14-Day Free Trial
+                        </button>
+                    `;
+                    
+                    grid.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Failed to load plans:', error);
+            }
+        }
+        
+        async function subscribeToPlan(tier) {
+            const clinicName = prompt('Enter your clinic name:');
+            if (!clinicName) return;
+            
+            const phone = prompt('Enter your WhatsApp number (10 digits):');
+            if (!phone) return;
+            
+            try {
+                const response = await fetch('/api/v1/subscriptions/subscribe', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: new URLSearchParams({
+                        clinic_name: clinicName,
+                        clinic_phone: phone,
+                        clinic_email: '',
+                        clinic_pincode: '400703',
+                        plan_tier: tier,
+                        billing_cycle: 'monthly'
+                    })
+                });
+                
+                if (response.ok) {
+                    alert('🎉 Trial activated! Check your WhatsApp for confirmation.');
+                } else {
+                    alert('Error: ' + await response.text());
+                }
+            } catch (error) {
+                alert('Failed to subscribe: ' + error);
+            }
+        }
+        
+        loadPlans();
+    </script>
+</body>
+</html>
