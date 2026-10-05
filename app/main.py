@@ -1,51 +1,18 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-
-from app.core.config import get_settings
-from app.api.router import router as pilot_router
-
-settings = get_settings()
-
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup
-    print(f"🚀 Starting {settings.app_name}...")
-    yield
-    # Shutdown
-    print(f"👋 Shutting down {settings.app_name}...")
-
+from app.core.config import settings
+from app.api import abdm, auth
 
 app = FastAPI(
-    title=settings.app_name,
-    description="Concierge MVP for B2B doctor staffing in MMR",
-    version="0.1.0",
-    lifespan=lifespan,
+    title=settings.PROJECT_NAME,
+    version="0.2.0",
+    docs_url="/docs",
+    redoc_url="/redoc"
 )
 
-# CORS for frontend
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Register routers
-app.include_router(pilot_router)
-
-
-@app.get("/")
-async def root():
-    return {
-        "app": settings.app_name,
-        "status": "running",
-        "docs": "/docs",
-    }
-
+# Include Routers
+app.include_router(abdm.router, prefix="/api/v1")
+app.include_router(auth.router, prefix="/api/v1")
 
 @app.get("/health")
-async def health():
-    return {"status": "healthy"}
+async def health_check():
+    return {"status": "healthy", "service": settings.PROJECT_NAME}
