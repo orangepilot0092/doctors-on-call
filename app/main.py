@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from app.core.config import settings
-from app.api import abdm, auth
+from app.api import abdm, auth, hpr
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
-    version="0.2.0",
+    version="0.3.0",
     docs_url="/docs",
     redoc_url="/redoc"
 )
@@ -12,6 +12,7 @@ app = FastAPI(
 # Include Routers
 app.include_router(abdm.router, prefix="/api/v1")
 app.include_router(auth.router, prefix="/api/v1")
+app.include_router(hpr.router, prefix="/api/v1")
 
 @app.get("/health")
 async def health_check():
