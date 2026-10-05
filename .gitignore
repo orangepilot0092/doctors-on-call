@@ -1,23 +1,57 @@
+# Python
 __pycache__/
 *.py[cod]
+*$py.class
 *.so
-.venv/
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Virtual Environments
 venv/
+.venv/
 env/
-.env
-.env.local
-*.log
-logs/
-tmp/
-*.db
-*.sqlite
+
+# IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+
+# Environment Variables (NEVER commit secrets)
+.env
+.env.local
+.env.production
+
+# Logs (prevent future log pollution)
+*.log
+uvicorn*.log
+
+# OS files
 .DS_Store
-uploads/
-certificates/
-dist/
-build/
+Thumbs.db
+
+# Database
+*.db
+*.sqlite3
+
+# MinIO data
+minio-data/
+
+# Poetry
+# Keep poetry.lock (it's intentional for reproducibility)
+
+# Testing
 .pytest_cache/
 .coverage
-.mypy_cache/
+htmlcov/
+
+# Docker
+.docker/
+
+# Temporary files
+*.tmp
+*.bak
