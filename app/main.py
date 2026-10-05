@@ -1,32 +1,30 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
 from contextlib import asynccontextmanager
 
 from app.core.config import get_settings
 from app.api.router import router as pilot_router
-from app.api.doctor_router import router as doctor_router
-from app.api.subscription_router import router as subscription_router
 
 settings = get_settings()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Startup
     print(f"🚀 Starting {settings.app_name}...")
     yield
+    # Shutdown
     print(f"👋 Shutting down {settings.app_name}...")
 
 
 app = FastAPI(
     title=settings.app_name,
-    description="AI-Powered Medical Staffing Platform with Subscription Billing",
-    version="2.0.0",
+    description="Concierge MVP for B2B doctor staffing in MMR",
+    version="0.1.0",
     lifespan=lifespan,
 )
 
+# CORS for frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -35,30 +33,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory="app/static"), name="static")
-templates = Jinja2Templates(directory="app/templates")
-
-# Register all routers
+# Register routers
 app.include_router(pilot_router)
-app.include_router(doctor_router)
-app.include_router(subscription_router)
 
 
-@app.get("/", response_class=HTMLResponse)
-async def clinic_portal(request: Request):
-    return templates.TemplateResponse(request=request, name="clinic_portal.html", context={})
-
-
-@app.get("/doctors", response_class=HTMLResponse)
-async def doctor_portal(request: Request):
-    return templates.TemplateResponse(request=request, name="doctor_portal.html", context={})
-
-
-@app.get("/pricing", response_class=HTMLResponse)
-async def pricing_page(request: Request):
-    return templates.TemplateResponse(request=request, name="pricing.html", context={})
+@app.get("/")
+async def root():
+    return {
+        "app": settings.app_name,
+        "status": "running",
+        "docs": "/docs",
+    }
 
 
 @app.get("/health")
 async def health():
-    return {"status": "healthy", "version": "2.0.0"}
+    return {"status": "healthy"}

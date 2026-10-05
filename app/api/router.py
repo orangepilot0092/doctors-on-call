@@ -18,7 +18,10 @@ async def create_shift_request(
     background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
 ):
-    """Clinic submits a shift request."""
+    """
+    Clinic submits a shift request.
+    Returns immediately with a 'matching' status while the 'AI' works in the background.
+    """
     new_shift = ShiftRequest(
         clinic_name=request.clinic_name,
         clinic_pincode=request.clinic_pincode,
@@ -32,6 +35,7 @@ async def create_shift_request(
     await db.commit()
     await db.refresh(new_shift)
 
+    # Trigger the "AI" background task
     background_tasks.add_task(
         simulate_ai_matching_and_notify_founder,
         str(new_shift.id),
@@ -47,7 +51,7 @@ async def create_shift_request(
 
 @router.get("/shifts", response_model=List[ShiftStatusResponse])
 async def list_shifts(db: AsyncSession = Depends(get_db)):
-    """List all shift requests."""
+    """List all shift requests (founder command center view)."""
     result = await db.execute(
         select(ShiftRequest).order_by(ShiftRequest.created_at.desc())
     )
