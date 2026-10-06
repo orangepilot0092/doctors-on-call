@@ -192,7 +192,7 @@ class DoctorCredential(Base):
     verified_by = Column(String(100), nullable=True)  # Operator name or "system"
     
     # Additional metadata
-    metadata = Column(JSON, nullable=True)  # Flexible field for credential-specific data
+    extra_data = Column(JSON, nullable=True)  # Flexible field for credential-specific data
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())

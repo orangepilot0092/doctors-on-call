@@ -6,9 +6,9 @@ from app.models.doctor_master_record import (
     DoctorStatus, DocumentType, VerificationType, VerificationResult
 )
 from app.core.storage import storage_client
+from app.core.ocr import ocr_client
 from app.schemas.onboarding import DoctorOnboardingRequest
 
-# Map uploaded document types to the 14-point SOP verification types
 DOC_TYPE_TO_VERIFICATION_TYPE = {
     DocumentType.IDENTITY_AADHAAR: VerificationType.IDENTITY,
     DocumentType.IDENTITY_PAN: VerificationType.IDENTITY,
@@ -61,7 +61,10 @@ async def upload_doctor_document(
     # 2. Calculate SHA256 for tamper detection
     checksum = hashlib.sha256(file_bytes).hexdigest()
     
-    # 3. Save document record to DB
+    # 3. 🆕 Run Automated OCR
+    ocr_text, ocr_conf = ocr_client.extract_text(file_bytes, content_type)
+    
+    # 4. Save document record to DB
     doc = DoctorDocument(
         doctor_id=doctor_id,
         document_type=doc_type,
@@ -70,11 +73,13 @@ async def upload_doctor_document(
         checksum_sha256=checksum,
         file_size_bytes=len(file_bytes),
         mime_type=content_type,
+        ocr_text=ocr_text,
+        ocr_confidence=ocr_conf,
         is_verified=False
     )
     db.add(doc)
     
-    # 4. Create PENDING verification event (Triggers Operator Dashboard)
+    # 5. Create PENDING verification event
     verification_type = DOC_TYPE_TO_VERIFICATION_TYPE.get(doc_type, VerificationType.IDENTITY)
     
     event = VerificationEvent(
@@ -82,7 +87,7 @@ async def upload_doctor_document(
         verification_type=verification_type,
         result=VerificationResult.PENDING,
         verified_by="system",
-        notes=f"Document uploaded by doctor: {file_name}",
+        notes=f"Document uploaded. OCR Confidence: {ocr_conf}%",
         evidence_reference=storage_key
     )
     db.add(event)
