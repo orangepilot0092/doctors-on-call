@@ -34,3 +34,5 @@ __all__ = [
 
 from app.models.ledger import LedgerEntry
 __all__.append('LedgerEntry')
+from app.models.invoice import Invoice
+__all__.append('Invoice')
