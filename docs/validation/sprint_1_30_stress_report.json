@@ -1,0 +1,164 @@
+[
+  {
+    "phase": "00_Platform",
+    "test": "API health check",
+    "status": "PASS",
+    "details": "{\"status\": \"healthy\", \"service\": \"Doctors on Call\"}"
+  },
+  {
+    "phase": "01_Matching",
+    "test": "Transit-aware deterministic matching",
+    "status": "PASS",
+    "details": "{\"shift_id\": 500, \"total_matches\": 15, \"ranked_doctors\": [{\"doctor_id\": 8, \"doctor_code\": \"DOC-0008\", \"name\": \"Dr. Stress 8\", \"match_score\": 200, \"reasons\": [\"Specialty Match (ICU, Critical Care, Ventilator, ECMO)\", \"Transit Match (Central Line)\"], \"home_corridor\": \"Central Line\", \"specialty\": \"ICU,"
+  },
+  {
+    "phase": "01_Matching",
+    "test": "pgvector semantic matching",
+    "status": "PASS",
+    "details": "{\"query\": \"ICU Ventilator ECMO critical care\", \"total_matches\": 5, \"ranked_doctors\": [{\"id\": 505, \"doctor_code\": \"DOC-STRESS-505\", \"full_name\": \"Dr. Stress 505\", \"pg_specialty\": \"General Ward, Routine Care\"}, {\"id\": 507, \"doctor_code\": \"DOC-STRESS-507\", \"full_name\": \"Dr. Stress 507\", \"pg_specialty\":"
+  },
+  {
+    "phase": "02_Concurrency",
+    "test": "10 doctors race for one shift; exactly 1 wins, 9 blocked",
+    "status": "PASS",
+    "details": "success=[501], conflict_count=9, other=[]"
+  },
+  {
+    "phase": "03_Negotiation",
+    "test": "Routine shift rejects 14k counter-offer",
+    "status": "PASS",
+    "details": "{\"shift_id\": 503, \"urgency\": \"ROUTINE\", \"base_rate\": 10000, \"ai_evaluation\": {\"decision\": \"REJECTED\", \"message\": \"Sorry, the maximum authorized budget for this ROUTINE shift is \\u20b911000.\", \"final_rate\": 11000.0}}"
+  },
+  {
+    "phase": "03_Negotiation",
+    "test": "Critical shift accepts 14k counter-offer",
+    "status": "PASS",
+    "details": "{\"shift_id\": 504, \"urgency\": \"CRITICAL\", \"base_rate\": 10000, \"ai_evaluation\": {\"decision\": \"ACCEPTED_WITH_BUFFER\", \"message\": \"Given the CRITICAL nature of this shift, we can accommodate \\u20b914000.0.\", \"final_rate\": 14000.0}}"
+  },
+  {
+    "phase": "04_Handoff",
+    "test": "AI medical handoff briefing endpoint",
+    "status": "PASS",
+    "details": "{\"shift_id\": 504, \"facility_id\": 4, \"medical_briefing\": {\"status\": \"fallback_mode\", \"raw_notes\": \"Bed 4 is Mr. Sharma, 65yo COPD exacerbation on BiPAP, needs ABG at 9 PM, allergic to penicillin. Bed 5 is Mrs. Iyer, post-op day 1 appendectomy, check vitals q4h, pain managed with IV paracetamol.\", \"me"
+  },
+  {
+    "phase": "05_Lifecycle",
+    "test": "Doctor 1 accepts Shift 501",
+    "status": "PASS",
+    "details": "{\"message\": \"Shift accepted successfully!\", \"shift_id\": 501, \"doctor_id\": 1, \"new_status\": \"ASSIGNED\"}"
+  },
+  {
+    "phase": "05_Lifecycle",
+    "test": "Remote check-in blocked by geofence",
+    "status": "PASS",
+    "details": "{\"detail\": \"\\u274c Check-in REJECTED: You are 7047 meters away from JOY Hospital. You must be within 200 meters to check in.\"}"
+  },
+  {
+    "phase": "05_Lifecycle",
+    "test": "Local check-in accepted by geofence",
+    "status": "PASS",
+    "details": "{\"message\": \"\\u2705 Check-in successful! You are 18m from JOY Hospital.\", \"shift_id\": 501, \"check_in_time\": \"2026-10-06T12:52:25.924465+00:00\"}"
+  },
+  {
+    "phase": "05_Lifecycle",
+    "test": "Remote check-out blocked by geofence",
+    "status": "PASS",
+    "details": "{\"detail\": \"\\u274c Check-out REJECTED: You are 7047 meters away. Please return to the hospital ward to check out.\"}"
+  },
+  {
+    "phase": "05_Lifecycle",
+    "test": "Local check-out completes shift",
+    "status": "PASS",
+    "details": "{\"message\": \"\\u2705 Shift completed! Payment processing initiated.\", \"shift_id\": 501, \"check_out_time\": \"2026-10-06T12:52:25.940194+00:00\"}"
+  },
+  {
+    "phase": "05_Lifecycle",
+    "test": "Hospital funds escrow",
+    "status": "PASS",
+    "details": "{\"message\": \"Hospital payment successful. Funds held in Escrow.\", \"details\": {\"status\": \"HELD\", \"razorpay_id\": \"pay_MOCK_12000_XYZ123\", \"amount\": 12000.0}}"
+  },
+  {
+    "phase": "05_Lifecycle",
+    "test": "Instant payout triggered",
+    "status": "PASS",
+    "details": "{\"message\": \"Instant payout triggered successfully via RazorpayX.\", \"details\": {\"status\": \"PAID_OUT\", \"doctor_payout\": 10800.0, \"platform_fee\": 1200.0, \"razorpay_payout_id\": \"payout_MOCK_10800_ABC\", \"fund_account_id\": \"fa_MOCK_1_XYZ\"}}"
+  },
+  {
+    "phase": "06_Ledger",
+    "test": "Immutable ledger contains full money trail",
+    "status": "PASS",
+    "details": "['FEE', 'HOLD', 'PAYMENT', 'PAYOUT', 'RELEASE']"
+  },
+  {
+    "phase": "07_Compliance",
+    "test": "GST + TDS invoices generated correctly",
+    "status": "PASS",
+    "details": "{\"platform_invoice\": {\"number\": \"INV-PLAT-BDE39E8E\", \"base\": 1200.0, \"gst\": 216.0, \"total\": 1416.0}, \"doctor_invoice\": {\"number\": \"INV-DOC-1186A563\", \"base\": 10800.0, \"tds_deducted\": 216.0, \"net_payout\": 10584.0}}"
+  },
+  {
+    "phase": "08_Dispute",
+    "test": "Doctor 2 accepts Shift 502",
+    "status": "PASS",
+    "details": "{\"message\": \"Shift accepted successfully!\", \"shift_id\": 502, \"doctor_id\": 2, \"new_status\": \"ASSIGNED\"}"
+  },
+  {
+    "phase": "08_Dispute",
+    "test": "Hospital funds escrow for Shift 502",
+    "status": "PASS",
+    "details": "{\"message\": \"Hospital payment successful. Funds held in Escrow.\", \"details\": {\"status\": \"HELD\", \"razorpay_id\": \"pay_MOCK_10000_XYZ123\", \"amount\": 10000.0}}"
+  },
+  {
+    "phase": "08_Dispute",
+    "test": "Automatic no-show refund issued",
+    "status": "PASS",
+    "details": "{\"dispute_id\": 2, \"status\": \"REFUNDED\", \"refund_amount\": 10000.0, \"message\": \"Doctor no-show confirmed. Full escrow refunded to hospital.\"}"
+  },
+  {
+    "phase": "08_Dispute",
+    "test": "Refund appears in immutable ledger",
+    "status": "PASS",
+    "details": "['HOLD', 'PAYMENT', 'REFUND', 'REFUND_RECEIVED']"
+  },
+  {
+    "phase": "09_Trust",
+    "test": "Trust score calculated for Doctor 1",
+    "status": "PASS",
+    "details": "{\"doctor_id\": 1, \"doctor_code\": \"DOC-00001\", \"doctor_name\": \"Dr. Rohan Sharma\", \"trust_score\": 81, \"completed_shifts\": 8, \"no_shows\": 0, \"late_check_ins\": 0, \"open_disputes\": 0, \"refunded_disputes\": 0, \"verification_approved\": 3, \"verification_rejected\": 0, \"factors\": {\"base_score\": 50.0, \"completed"
+  },
+  {
+    "phase": "09_Trust",
+    "test": "Trust score calculated for Doctor 2",
+    "status": "PASS",
+    "details": "{\"doctor_id\": 2, \"doctor_code\": \"DOC-00002\", \"doctor_name\": \"Dr. Anita Desai\", \"trust_score\": 0, \"completed_shifts\": 0, \"no_shows\": 2, \"late_check_ins\": 0, \"open_disputes\": 0, \"refunded_disputes\": 2, \"verification_approved\": 2, \"verification_rejected\": 0, \"factors\": {\"base_score\": 50.0, \"completed_s"
+  },
+  {
+    "phase": "09_Trust",
+    "test": "Reliable doctor ranks above no-show doctor",
+    "status": "PASS",
+    "details": "Doctor1=81, Doctor2=0"
+  },
+  {
+    "phase": "09_Trust",
+    "test": "Trust leaderboard endpoint works",
+    "status": "PASS",
+    "details": "{\"leaderboard\": [{\"doctor_id\": 1, \"doctor_code\": \"DOC-00001\", \"doctor_name\": \"Dr. Rohan Sharma\", \"status\": \"shift_ready\", \"trust_score\": 81, \"completed_shift_count\": 8, \"no_show_count\": 0, \"late_check_in_count\": 0}, {\"doctor_id\": 2, \"doctor_code\": \"DOC-00002\", \"doctor_name\": \"Dr. Anita Desai\", \"stat"
+  },
+  {
+    "phase": "10_Dashboard",
+    "test": "Combined hospital dashboard returns all modules",
+    "status": "PASS",
+    "details": "{\"roster_summary\": {\"total_shifts\": 18, \"filled_shifts\": 9, \"open_shifts\": 9, \"critical_open_shifts\": 3, \"fill_rate_percent\": 50.0}, \"total_gaps\": 8, \"metrics_keys\": [\"facility\", \"window_days\", \"total_shifts\", \"status_counts\", \"department_breakdown\", \"fill_rate_percent\", \"no_show_disputes\", \"no_show"
+  },
+  {
+    "phase": "11_Realtime",
+    "test": "Facility live stream captured all key operational events",
+    "status": "PASS",
+    "details": "captured=['DISPUTE_OPENED', 'ESCROW_FUNDED', 'ESCROW_RELEASED', 'GPS_CHECK_IN', 'GPS_CHECK_OUT', 'PAYOUT_PROCESSED', 'REFUND_ISSUED', 'SHIFT_ACCEPTED']"
+  },
+  {
+    "phase": "11_Realtime",
+    "test": "Global live stream captured trust update event",
+    "status": "PASS",
+    "details": "captured=['TRUST_UPDATED']"
+  }
+]
