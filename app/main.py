@@ -1,8 +1,13 @@
 from fastapi import FastAPI
 from app.core.config import settings
-from app.api import abdm, auth, hpr, verification, shifts, facilities, whatsapp, bulk_import, portal
+from app.api import abdm, auth, hpr, verification, shifts, facilities, whatsapp, bulk_import, portal, ops_dashboard
 
-app = FastAPI(title=settings.PROJECT_NAME, version="1.0.0", docs_url="/docs", redoc_url="/redoc")
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    version="1.1.0",
+    docs_url="/docs",
+    redoc_url="/redoc"
+)
 
 app.include_router(abdm.router, prefix="/api/v1")
 app.include_router(auth.router, prefix="/api/v1")
@@ -13,6 +18,7 @@ app.include_router(facilities.router, prefix="/api/v1")
 app.include_router(whatsapp.router, prefix="/api/v1")
 app.include_router(bulk_import.router, prefix="/api/v1")
 app.include_router(portal.router, prefix="/api/v1")
+app.include_router(ops_dashboard.router)
 
 @app.get("/health")
 async def health_check():
