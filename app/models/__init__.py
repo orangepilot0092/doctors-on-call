@@ -31,3 +31,6 @@ __all__ = [
     "VerificationResult",
     "DocumentType",
 ]
+
+from app.models.ledger import LedgerEntry
+__all__.append('LedgerEntry')

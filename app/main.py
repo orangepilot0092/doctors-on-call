@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.core.config import settings
-from app.api import abdm, auth, hpr, verification, shifts, facilities, whatsapp, bulk_import, portal, ops_dashboard, onboarding, ops_queue, registry_verification, facility_verification, matching, shift_acceptance, attendance, semantic_matching, negotiation, handoff, attendance
+from app.api import abdm, auth, hpr, verification, shifts, facilities, whatsapp, bulk_import, portal, ops_dashboard, onboarding, ops_queue, registry_verification, facility_verification, matching, shift_acceptance, attendance, semantic_matching, negotiation, handoff, payments, attendance
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -29,10 +29,12 @@ app.include_router(attendance.router, prefix="/api/v1")
 app.include_router(semantic_matching.router, prefix="/api/v1")
 app.include_router(negotiation.router, prefix="/api/v1")
 app.include_router(handoff.router, prefix="/api/v1")
+app.include_router(payments.router, prefix="/api/v1")
 app.include_router(attendance.router, prefix="/api/v1")
 app.include_router(semantic_matching.router, prefix="/api/v1")
 app.include_router(negotiation.router, prefix="/api/v1")
 app.include_router(handoff.router, prefix="/api/v1")
+app.include_router(payments.router, prefix="/api/v1")
 
 @app.get("/health")
 async def health_check():

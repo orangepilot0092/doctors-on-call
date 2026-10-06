@@ -46,6 +46,8 @@ class Shift(Base):
     
     # Metadata
     urgency_level = Column(Enum(UrgencyLevel), default=UrgencyLevel.ROUTINE)
+    escrow_status = Column(String, default='UNPAID')
+    razorpay_payment_id = Column(String, nullable=True)
     status = Column(Enum(ShiftStatus), default=ShiftStatus.OPEN)
     
     # Compliance
