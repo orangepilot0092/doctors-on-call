@@ -41,7 +41,8 @@ async def find_matching_doctors(db: AsyncSession, shift_id: int) -> list[dict]:
         if shift_corridor != "Unknown" and doc.home_transit_corridor:
             if shift_corridor.lower() == doc.home_transit_corridor.lower():
                 score += 100
-                reasons.append(f"Transit Match ({doc.home_transit_corridor} Line)")
+                corridor_label = doc.home_transit_corridor if doc.home_transit_corridor.endswith("Line") else f"{doc.home_transit_corridor} Line"
+                reasons.append(f"Transit Match ({corridor_label})")
 
         # Only return doctors with at least some relevance (or all if no specific requirements)
         if score > 0 or not (shift_specialty or shift_corridor):

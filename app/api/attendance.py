@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
-from datetime import datetime
+from datetime import datetime, timezone
 from pydantic import BaseModel
 
 from app.db.session import get_db
@@ -50,7 +50,7 @@ async def check_in(shift_id: int, data: LocationPayload, db: AsyncSession = Depe
         )
         
     # 5. Record Check-in
-    shift.check_in_time = datetime.utcnow()
+    shift.check_in_time = datetime.now(timezone.utc)
     shift.check_in_lat = data.latitude
     shift.check_in_lon = data.longitude
     await db.commit()
@@ -86,7 +86,7 @@ async def check_out(shift_id: int, data: LocationPayload, db: AsyncSession = Dep
             f"❌ Check-out REJECTED: You are {distance:.0f} meters away. Please return to the hospital ward to check out."
         )
         
-    shift.check_out_time = datetime.utcnow()
+    shift.check_out_time = datetime.now(timezone.utc)
     shift.check_out_lat = data.latitude
     shift.check_out_lon = data.longitude
     shift.status = ShiftStatus.COMPLETED

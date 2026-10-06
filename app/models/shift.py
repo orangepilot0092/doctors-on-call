@@ -16,8 +16,8 @@ class ShiftStatus(str, enum.Enum):
 
 class Shift(Base):
     __tablename__ = "shifts"
-    check_in_time = Column(DateTime, nullable=True)
-    check_out_time = Column(DateTime, nullable=True)
+    check_in_time = Column(DateTime(timezone=True), nullable=True)
+    check_out_time = Column(DateTime(timezone=True), nullable=True)
     check_in_lat = Column(Float, nullable=True)
     check_in_lon = Column(Float, nullable=True)
     check_out_lat = Column(Float, nullable=True)

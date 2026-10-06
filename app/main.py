@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.core.config import settings
-from app.api import abdm, auth, hpr, verification, shifts, facilities, whatsapp, bulk_import, portal, ops_dashboard, onboarding, ops_queue, registry_verification, facility_verification, matching, shift_acceptance, attendance, semantic_matching, negotiation, handoff, payments, payouts, compliance, disputes, attendance, trust
+from app.api import abdm, auth, hpr, verification, shifts, facilities, whatsapp, bulk_import, portal, ops_dashboard, onboarding, ops_queue, registry_verification, facility_verification, matching, shift_acceptance, attendance, semantic_matching, negotiation, handoff, payments, payouts, compliance, disputes, attendance, trust, hospital_rostering
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -17,6 +17,7 @@ async def health_check():
 
 ROUTERS_BY_PREFIX = {
     "/api/v1": [
+        hospital_rostering,
         abdm,
         auth,
         hpr,
