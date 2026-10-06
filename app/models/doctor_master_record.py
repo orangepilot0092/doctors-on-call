@@ -12,6 +12,7 @@ Design Principles:
 
 NEVER DELETE FROM verification_events. Only add new events.
 """
+from pgvector.sqlalchemy import Vector
 from sqlalchemy import Column, Integer, String, DateTime, Boolean, JSON, Text, ForeignKey, Enum as SQLEnum, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
@@ -94,6 +95,7 @@ class Doctor(Base):
     in verification_events, not here.
     """
     __tablename__ = "doctors"
+    skill_embedding = Column(Vector(1536), nullable=True)
     
     # Core identity
     id = Column(Integer, primary_key=True, index=True)
