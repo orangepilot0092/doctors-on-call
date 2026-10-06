@@ -7,6 +7,13 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     TELEGRAM_BOT_TOKEN: Optional[str] = None
     TELEGRAM_CHAT_ID: Optional[str] = None
+    # LLM Gateway Settings
+    LLM_PROVIDER: str = "groq"
+    GROQ_API_KEY: str = "test_groq_key"
+    GROQ_MODEL: str = "llama3-70b-8192"
+    OLLAMA_BASE_URL: str = "http://localhost:11434"
+    OLLAMA_MODEL: str = "llama3"
+
 
     PROJECT_NAME: str = "Doctors on Call"
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgres@localhost:5433/docsoncall"
