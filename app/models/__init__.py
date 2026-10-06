@@ -36,3 +36,5 @@ from app.models.ledger import LedgerEntry
 __all__.append('LedgerEntry')
 from app.models.invoice import Invoice
 __all__.append('Invoice')
+from app.models.dispute import Dispute
+__all__.append('Dispute')
