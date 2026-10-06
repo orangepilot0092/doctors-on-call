@@ -16,6 +16,12 @@ class ShiftStatus(str, enum.Enum):
 
 class Shift(Base):
     __tablename__ = "shifts"
+    check_in_time = Column(DateTime, nullable=True)
+    check_out_time = Column(DateTime, nullable=True)
+    check_in_lat = Column(Float, nullable=True)
+    check_in_lon = Column(Float, nullable=True)
+    check_out_lat = Column(Float, nullable=True)
+    check_out_lon = Column(Float, nullable=True)
     assigned_doctor_id = Column(Integer, nullable=True)
     required_specialty = Column(String, nullable=True)
     
