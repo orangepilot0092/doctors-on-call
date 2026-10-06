@@ -16,6 +16,7 @@ class ShiftStatus(str, enum.Enum):
 
 class Shift(Base):
     __tablename__ = "shifts"
+    assigned_doctor_id = Column(Integer, nullable=True)
     required_specialty = Column(String, nullable=True)
     
     id = Column(Integer, primary_key=True, index=True)
