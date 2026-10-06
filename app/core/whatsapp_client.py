@@ -1,16 +1,17 @@
-import httpx
-from app.core.config import settings
+from app.core.whatsapp_providers import WhatsAppProviderFactory, WhatsAppProvider
 
 class WhatsAppClient:
+    """
+    High-level WhatsApp client used by the business logic.
+    Delegates all actual API calls to the configured provider (Meta, Gupshup, etc.).
+    """
     def __init__(self):
-        self.phone_number_id = getattr(settings, "WA_PHONE_NUMBER_ID", "test_id")
-        self.access_token = getattr(settings, "WA_ACCESS_TOKEN", "test_token")
-        self.api_version = getattr(settings, "WA_API_VERSION", "v19.0")
-        self.base_url = f"https://graph.facebook.com/{self.api_version}/{self.phone_number_id}/messages"
-        self.headers = {"Authorization": f"Bearer {self.access_token}", "Content-Type": "application/json"}
+        self.provider: WhatsAppProvider = WhatsAppProviderFactory.get_provider()
 
     async def send_text_message(self, to: str, body: str) -> dict:
-        # Placeholder for now; full implementation in Sprint 8
-        return {"status": "sent", "to": to, "body": body}
+        return await self.provider.send_text_message(to, body)
+
+    async def send_template_message(self, to: str, template_name: str, parameters: list) -> dict:
+        return await self.provider.send_template_message(to, template_name, parameters)
 
 wa_client = WhatsAppClient()
