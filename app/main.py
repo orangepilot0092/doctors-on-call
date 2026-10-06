@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.core.config import settings
-from app.api import abdm, auth, hpr, verification, shifts, facilities, whatsapp, bulk_import, portal, ops_dashboard, onboarding, ops_queue, registry_verification, facility_verification
+from app.api import abdm, auth, hpr, verification, shifts, facilities, whatsapp, bulk_import, portal, ops_dashboard, onboarding, ops_queue, registry_verification, facility_verification, matching
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -23,6 +23,7 @@ app.include_router(onboarding.router, prefix="/api/v1")
 app.include_router(ops_queue.router, prefix="/api/v1")
 app.include_router(registry_verification.router, prefix="/api/v1")
 app.include_router(facility_verification.router, prefix="/api/v1")
+app.include_router(matching.router, prefix="/api/v1")
 
 @app.get("/health")
 async def health_check():

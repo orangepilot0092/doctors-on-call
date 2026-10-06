@@ -134,6 +134,7 @@ class Doctor(Base):
     # Availability
     is_available = Column(Boolean, default=False)
     preferred_locations = Column(JSON, nullable=True)  # List of areas
+    home_transit_corridor = Column(String, nullable=True)
     preferred_shifts = Column(JSON, nullable=True)  # List of shift types
     availability_notes = Column(Text, nullable=True)
     

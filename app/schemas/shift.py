@@ -16,6 +16,10 @@ class ShiftStatus(str, Enum):
 
 class ShiftCreate(BaseModel):
     facility_id: int
+    title: str | None = "Locum Shift"
+    required_specialty: str | None = None
+    title: str
+    required_specialty: str | None = None
     role_required: str
     department: str
     start_time: datetime
@@ -31,6 +35,10 @@ class ShiftCreate(BaseModel):
 class ShiftRead(BaseModel):
     id: int
     facility_id: int
+    title: str | None = "Locum Shift"
+    required_specialty: str | None = None
+    title: str
+    required_specialty: str | None = None
     role_required: str
     department: str
     start_time: datetime
