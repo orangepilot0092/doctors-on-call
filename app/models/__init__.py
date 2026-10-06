@@ -38,3 +38,6 @@ from app.models.invoice import Invoice
 __all__.append('Invoice')
 from app.models.dispute import Dispute
 __all__.append('Dispute')
+
+from app.models.trust_snapshot import TrustSnapshot
+__all__.append('TrustSnapshot')

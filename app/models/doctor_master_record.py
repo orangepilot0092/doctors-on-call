@@ -95,6 +95,10 @@ class Doctor(Base):
     in verification_events, not here.
     """
     __tablename__ = "doctors"
+    completed_shift_count = Column(Integer, default=0, nullable=True)
+    no_show_count = Column(Integer, default=0, nullable=True)
+    late_check_in_count = Column(Integer, default=0, nullable=True)
+    last_trust_calculated_at = Column(DateTime(timezone=True), nullable=True)
     skill_embedding = Column(Vector(1536), nullable=True)
     
     # Core identity
