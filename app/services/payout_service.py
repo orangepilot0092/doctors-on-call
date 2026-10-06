@@ -4,6 +4,7 @@ from sqlalchemy import select
 from app.models.shift import Shift, ShiftStatus
 from app.models.doctor_master_record import Doctor
 from app.models.ledger import LedgerEntry
+from app.services.ops_events import publish_ops_event
 
 class MockRazorpayXClient:
     async def create_fund_account(self, doctor_id: int, name: str, ifsc: str, account: str) -> str:
@@ -56,6 +57,19 @@ class PayoutService:
         # 4. Update Shift Status
         shift.escrow_status = "PAID_OUT"
         await db.commit()
+        await publish_ops_event(shift.facility_id, 'ESCROW_RELEASED', {
+            'shift_id': shift.id,
+            'doctor_payout': doctor_payout,
+            'platform_fee': fee,
+        })
+        await publish_ops_event(shift.facility_id, 'PAYOUT_PROCESSED', {
+            'shift_id': shift.id,
+            'doctor_id': doctor_id,
+            'doctor_payout': doctor_payout,
+            'platform_fee': fee,
+            'razorpay_payout_id': payout_id,
+            'fund_account_id': fund_account_id,
+        })
         
         return {
             "status": "PAID_OUT",

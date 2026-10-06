@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 from app.models.shift import Shift, ShiftStatus
 from app.models.ledger import LedgerEntry
+from app.services.ops_events import publish_ops_event
 
 class MockRazorpayClient:
     async def create_payment(self, amount: float, notes: str) -> str:
@@ -33,6 +34,11 @@ class EscrowService:
         shift.escrow_status = "HELD"
         shift.razorpay_payment_id = rp_id
         await db.commit()
+        await publish_ops_event(shift.facility_id, 'ESCROW_FUNDED', {
+            'shift_id': shift.id,
+            'amount_inr': amount,
+            'razorpay_id': rp_id,
+        })
         return {"status": "HELD", "razorpay_id": rp_id, "amount": amount}
 
     @staticmethod
@@ -56,4 +62,9 @@ class EscrowService:
         
         shift.escrow_status = "RELEASED"
         await db.commit()
+        await publish_ops_event(shift.facility_id, 'ESCROW_RELEASED', {
+            'shift_id': shift.id,
+            'doctor_payout': doctor_payout,
+            'platform_fee': fee,
+        })
         return {"status": "RELEASED", "doctor_payout": doctor_payout, "platform_fee": fee}

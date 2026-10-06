@@ -5,6 +5,7 @@ from sqlalchemy import select
 from app.db.session import get_db
 from app.models.shift import Shift, ShiftStatus
 from app.services.shift_lock_service import ShiftLockService
+from app.services.ops_events import publish_ops_event
 
 router = APIRouter(prefix="/shifts", tags=["Shift Acceptance"])
 
@@ -46,6 +47,10 @@ async def accept_shift(shift_id: int, doctor_id: int, db: AsyncSession = Depends
         shift.status = ShiftStatus.ASSIGNED
         
         await db.commit()
+        await publish_ops_event(shift.facility_id, 'SHIFT_ACCEPTED', {
+            'shift_id': shift.id,
+            'doctor_id': doctor_id,
+        })
         
         return {
             "message": "Shift accepted successfully!",

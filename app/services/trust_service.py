@@ -7,6 +7,7 @@ from app.models.doctor_master_record import Doctor, VerificationEvent, Verificat
 from app.models.shift import Shift, ShiftStatus
 from app.models.dispute import Dispute
 from app.models.trust_snapshot import TrustSnapshot
+from app.services.ops_events import publish_ops_event
 
 
 class TrustScoreService:
@@ -165,6 +166,17 @@ class TrustScoreService:
         await db.refresh(snapshot)
         await db.refresh(doctor)
 
+        await publish_ops_event(
+            None,
+            'TRUST_UPDATED',
+            {
+                'doctor_id': doctor_id,
+                'doctor_name': doctor.full_name,
+                'trust_score': score,
+                'explanation': explanation,
+            },
+            channel='global',
+        )
         return {
             "doctor_id": doctor_id,
             "doctor_code": doctor.doctor_code,

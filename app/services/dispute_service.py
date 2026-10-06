@@ -6,6 +6,7 @@ from sqlalchemy import select
 from app.models.shift import Shift, ShiftStatus
 from app.models.dispute import Dispute
 from app.models.ledger import LedgerEntry
+from app.services.ops_events import publish_ops_event
 
 
 class DisputeService:
@@ -118,6 +119,18 @@ class DisputeService:
 
             await db.commit()
             await db.refresh(dispute)
+            await publish_ops_event(shift.facility_id, 'DISPUTE_OPENED', {
+                'shift_id': shift.id,
+                'doctor_id': shift.assigned_doctor_id,
+                'dispute_type': 'NO_SHOW',
+                'amount_claimed_inr': amount,
+            })
+            await publish_ops_event(shift.facility_id, 'REFUND_ISSUED', {
+                'shift_id': shift.id,
+                'doctor_id': shift.assigned_doctor_id,
+                'dispute_id': dispute.id,
+                'amount_refunded_inr': amount,
+            })
 
             return {
                 "dispute_id": dispute.id,

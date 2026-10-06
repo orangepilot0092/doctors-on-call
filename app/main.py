@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.core.config import settings
-from app.api import abdm, auth, hpr, verification, shifts, facilities, whatsapp, bulk_import, portal, ops_dashboard, onboarding, ops_queue, registry_verification, facility_verification, matching, shift_acceptance, attendance, semantic_matching, negotiation, handoff, payments, payouts, compliance, disputes, attendance, trust, hospital_rostering
+from app.api import abdm, auth, hpr, verification, shifts, facilities, whatsapp, bulk_import, portal, ops_dashboard, onboarding, ops_queue, registry_verification, facility_verification, matching, shift_acceptance, attendance, semantic_matching, negotiation, handoff, payments, payouts, compliance, disputes, attendance, trust, hospital_rostering, ops_realtime
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -49,3 +49,5 @@ for _prefix, _router_list in ROUTERS_BY_PREFIX.items():
         app.include_router(_router.router, prefix=_prefix)
 
 app.include_router(trust.router, prefix="/api/v1")
+
+app.include_router(ops_realtime.router, prefix="/api/v1")
